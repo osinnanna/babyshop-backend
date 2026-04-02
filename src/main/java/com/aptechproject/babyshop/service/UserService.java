@@ -2,6 +2,7 @@ package com.aptechproject.babyshop.service;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.aptechproject.babyshop.model.User;
@@ -11,14 +12,17 @@ import com.aptechproject.babyshop.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     } // Dependency injection
 
     public User registerUser(User newUser) {
         // 1. Find if they already exist
-        // 2. If existing throw an error if not register the user, if not save
+        // 2. If existing throw an error if not register the user, if not Step 3
+        // 3. Hash the password and then save
 
         // 1
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
@@ -27,6 +31,9 @@ public class UserService {
         if (existingUser.isPresent()) {
             throw new RuntimeException("You are already registered");
         }
+
+        // 3
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
         userRepository.save(newUser);
         return newUser;
