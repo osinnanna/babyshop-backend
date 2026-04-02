@@ -21,4 +21,6 @@ public final class AppConstants {
     public static final String API_USERS = API_BASE + "/users";
     public static final String API_REGISTER = "/register";
     public static final String API_LOGIN = "/login";
+    public static final String API_PRODUCTS = API_BASE + "/products";
+    public static final String API_ADD_PRODUCT = "/add"; 
 }
