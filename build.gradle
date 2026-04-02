@@ -35,6 +35,9 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	// Image Processing (WebP Conversion)
+	implementation 'com.sksamuel.scrimage:scrimage-core:4.3.0'
+	implementation 'com.sksamuel.scrimage:scrimage-webp:4.3.0'
 }
 
 tasks.named('test') {
