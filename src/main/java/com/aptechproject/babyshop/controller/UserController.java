@@ -1,5 +1,7 @@
 package com.aptechproject.babyshop.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.dto.LoginRequest;
 import com.aptechproject.babyshop.model.User;
+import com.aptechproject.babyshop.service.JwtService;
 import com.aptechproject.babyshop.service.UserService;
 
 import jakarta.validation.Valid;
@@ -18,9 +21,11 @@ import jakarta.validation.Valid;
 @RequestMapping(AppConstants.API_USERS)
 public class UserController {
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping(AppConstants.API_REGISTER)
@@ -43,13 +48,17 @@ public class UserController {
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         // 1. Using try catch to implement the already made method in UserService
         // 2. In try use the email and password in LoginRequest to login
-        // 3. If success return appropriate response
+        // 3. If success generate a token and respond with token
         // 4. In catch, the thrown RuntimeException should be handled properly
 
         // 1
         try {
-            userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
-            return ResponseEntity.status(HttpStatus.OK).body(loginRequest.getEmail());
+            // 2
+            User loginUser = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+
+            // 3
+            String token = jwtService.generateToken(loginUser.getEmail());
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
