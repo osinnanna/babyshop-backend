@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
  /*
-    The moment you add the dependency **implementation 'org.springframework.boot:spring-boot-starter-security'**, it acts like a hyper-aggressive nightclub bouncer. By default, it completely locks down every single URL in your app and demands a username and password just to look at the site. This would break the /register endpoint you just built! need for a configuration file to tell the bouncer: "Keep the doors unlocked for registration and login, but let us use your BCrypt tool."
+    The moment you add the dependency **implementation 'org.springframework.boot:spring-boot-starter-security'**, it acts like a hyper-aggressive nightclub bouncer. By default, it completely locks down every single URL in your app and demands a username and password just to look at the site. This would break the /register endpoint just built! need for a configuration file to tell the bouncer: "Keep the doors unlocked for registration and login, but let us use your BCrypt tool."
  */
 
     @Bean // 1. create bcrypt tool and make avaialable to the rest of the application
@@ -24,7 +24,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/users/**", "/api/products/**").permitAll()
                 .anyRequest().authenticated()
             );
 
