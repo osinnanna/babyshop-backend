@@ -38,4 +38,19 @@ public class UserService {
         userRepository.save(newUser);
         return newUser;
     }
+
+    public User loginUser(String email, String rawPassword) {
+        // 1. Find the user by email if not exists the throw and Error
+        // 2. Check the password using passwordEncoder(s) match Method
+        // 3. Return user (if success)
+
+        // 1
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Invalid email or password"));
+        // 2
+        boolean isPasswordValid = passwordEncoder.matches(rawPassword, user.getPassword());
+        
+
+        if (!isPasswordValid) throw new RuntimeException("Invalid email or password");
+        return user;
+    }
 }
