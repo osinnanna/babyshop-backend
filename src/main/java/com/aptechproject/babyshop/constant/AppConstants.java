@@ -1,0 +1,22 @@
+package com.aptechproject.babyshop.constant;
+
+public final class AppConstants {
+
+    private AppConstants() {}
+
+    // --- ERROR MESSAGES ---
+    public static final String ERROR_USER_ALREADY_EXISTS = "You are already registered";
+    public static final String ERROR_INVALID_CREDENTIALS = "Invalid email or password";
+
+    // --- VALIDATION MESSAGES ---
+    public static final String VALIDATION_NAME_EMPTY = "Name cannot be empty";
+    public static final String VALIDATION_EMAIL_EMPTY = "Email cannot be empty";
+    public static final String VALIDATION_EMAIL_INVALID = "Must be a valid email format";
+    public static final String VALIDATION_PASSWORD_EMPTY = "Password cannot be empty";
+
+    // --- API ENDPOINTS ---
+    public static final String API_BASE = "/api";
+    public static final String API_USERS = API_BASE + "/users";
+    public static final String API_REGISTER = "/register";
+    public static final String API_LOGIN = "/login";
+}
