@@ -13,6 +13,8 @@ public final class AppConstants {
     public static final String VALIDATION_EMAIL_EMPTY = "Email cannot be empty";
     public static final String VALIDATION_EMAIL_INVALID = "Must be a valid email format";
     public static final String VALIDATION_PASSWORD_EMPTY = "Password cannot be empty";
+    public static final String VALIDATION_STOCKQTY_EMPTY = "Stock cannot be null";
+    public static final String VALIDATION_PRICE_EMPTY = "Price cannot be null";
 
     // --- API ENDPOINTS ---
     public static final String API_BASE = "/api";
