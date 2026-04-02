@@ -7,6 +7,7 @@ public final class AppConstants {
     // --- ERROR MESSAGES ---
     public static final String ERROR_USER_ALREADY_EXISTS = "You are already registered";
     public static final String ERROR_INVALID_CREDENTIALS = "Invalid email or password";
+    public static final String ERROR_IMAGE_UPLOAD = "Failed to upload image to Supabase";
 
     // --- VALIDATION MESSAGES ---
     public static final String VALIDATION_NAME_EMPTY = "Name cannot be empty";
