@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.model.User;
 import com.aptechproject.babyshop.service.UserService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(AppConstants.API_USERS)
 public class UserController {
     private final UserService userService;
 
@@ -21,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping(AppConstants.API_REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody User newUser) {
         // using @Valid checks the acutal validations set in the User.java file
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.model.User;
 import com.aptechproject.babyshop.repository.UserRepository;
 
@@ -29,7 +30,7 @@ public class UserService {
         
         // 2
         if (existingUser.isPresent()) {
-            throw new RuntimeException("You are already registered");
+            throw new RuntimeException(AppConstants.ERROR_USER_ALREADY_EXISTS);
         }
 
         // 3
@@ -45,12 +46,12 @@ public class UserService {
         // 3. Return user (if success)
 
         // 1
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Invalid email or password"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS));
         // 2
         boolean isPasswordValid = passwordEncoder.matches(rawPassword, user.getPassword());
         
 
-        if (!isPasswordValid) throw new RuntimeException("Invalid email or password");
+        if (!isPasswordValid) throw new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS);
         return user;
     }
 }
