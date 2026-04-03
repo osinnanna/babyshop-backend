@@ -2,6 +2,8 @@ package com.aptechproject.babyshop.service;
 
 import org.springframework.stereotype.Service;
 
+import com.aptechproject.babyshop.model.User;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -21,9 +23,10 @@ public class JwtService {
     private final long jwtExpirationDate = 86400000;
 
     // Generate the token
-    public String generateToken(String email) {
+    public String generateToken(User user) {
         return Jwts.builder()
-            .setSubject(email)
+            .setSubject(user.getEmail())
+            .claim("role", user.getRole().name())
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationDate))
             .signWith(key(), SignatureAlgorithm.HS256)

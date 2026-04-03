@@ -57,7 +57,7 @@ public class UserController {
             User loginUser = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
             // 3
-            String token = jwtService.generateToken(loginUser.getEmail());
+            String token = jwtService.generateToken(loginUser);
             return ResponseEntity.ok(Map.of("token", token));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
