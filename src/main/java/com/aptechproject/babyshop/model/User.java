@@ -25,4 +25,7 @@ public class User {
 
     @NotBlank(message = AppConstants.VALIDATION_PASSWORD_EMPTY)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.ROLE_USER;
 }
