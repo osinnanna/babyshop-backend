@@ -1,10 +1,13 @@
 package com.aptechproject.babyshop.service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aptechproject.babyshop.constant.AppConstants;
+import com.aptechproject.babyshop.dto.CheckoutReceipt;
 import com.aptechproject.babyshop.model.Cart;
 import com.aptechproject.babyshop.model.CartItem;
 import com.aptechproject.babyshop.model.Product;
@@ -74,5 +77,47 @@ public class CartService {
 
         // 6
         return cart;
+    }
+
+    @Transactional
+    public CheckoutReceipt checkoutCart(String userEmail) {
+        // 1. Find user and their cart
+        // 2. Check if the cart is empty. If it is, throw an exception ("Cart is empty!")
+        // 3. Loop through the items in the Cart (cart.item) -> add to totalAmount and add to quantity -> grab the product and reduce from its stockQuantity
+
+        // 1
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_CART_INVALID));
+
+        if (cart.getItems().isEmpty()) throw new RuntimeException(AppConstants.ERROR_CART_EMPTY);
+
+        double totalAmount = 0.0;
+        int totalItems = 0;
+
+        // 3
+        for (CartItem item : cart.getItems()) {
+            Product productAttachedToItem = item.getProduct();
+
+            BigDecimal bgDecItemTotal = productAttachedToItem.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            totalAmount += bgDecItemTotal.doubleValue();
+            totalItems += item.getQuantity();
+
+            productAttachedToItem.setStockQuantity(productAttachedToItem.getStockQuantity() - item.getQuantity());
+            productRepository.save(productAttachedToItem);
+        }
+
+        // 4. Empty the cart in the database!
+        cartItemRepository.deleteAll(cart.getItems());
+
+        // 5. Empty the cart in Java memory!
+        cart.getItems().clear();
+
+        // 6. make the receipt
+        CheckoutReceipt receipt = new CheckoutReceipt();
+        receipt.setMessage(AppConstants.VALIDATION_CHECKOUT_SUCCESSFUL);
+        receipt.setTotalItemsBought(totalItems);
+        receipt.setTotalAmountPaid(totalAmount);
+
+        return receipt;
     }
 }

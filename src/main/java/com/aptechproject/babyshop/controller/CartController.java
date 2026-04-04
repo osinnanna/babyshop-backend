@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.dto.AddToCartRequest;
+import com.aptechproject.babyshop.dto.CheckoutReceipt;
 import com.aptechproject.babyshop.model.Cart;
 import com.aptechproject.babyshop.service.CartService;
 
@@ -42,6 +43,17 @@ public class CartController {
             // 3
             return ResponseEntity.ok(updatedCart);
 
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(AppConstants.API_CHECKOUT)
+    public ResponseEntity<?> checkout() {
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            CheckoutReceipt receipt = cartService.checkoutCart(email);
+            return ResponseEntity.ok(receipt);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

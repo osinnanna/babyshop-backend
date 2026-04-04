@@ -10,6 +10,8 @@ public final class AppConstants {
     public static final String ERROR_IMAGE_UPLOAD = "Failed to upload image to Supabase";
     public static final String ERROR_PRODUCT_INVALID = "Product cannot be found";
     public static final String ERROR_CART_INVALID = "There was an error, your cart does not exists";
+    public static final String ERROR_CART_EMPTY = "Cart is empty!";
+    
 
     // --- VALIDATION MESSAGES ---
     public static final String VALIDATION_NAME_EMPTY = "Name cannot be empty";
@@ -27,4 +29,8 @@ public final class AppConstants {
     public static final String API_PRODUCTS = API_BASE + "/products";
     public static final String API_SERVICE_ADD = "/add";
     public static final String API_CART = API_BASE + "/cart";
+    public static final String API_CHECKOUT = "/checkout";
+
+    // --- SUCCESS MESSAGES ---
+    public static final String VALIDATION_CHECKOUT_SUCCESSFUL= "Checkout successful! Thank you for shopping.";
 }
