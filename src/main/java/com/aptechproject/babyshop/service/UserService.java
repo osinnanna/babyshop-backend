@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.aptechproject.babyshop.constant.AppConstants;
+import com.aptechproject.babyshop.model.Cart;
 import com.aptechproject.babyshop.model.User;
+import com.aptechproject.babyshop.repository.CartRepository;
 import com.aptechproject.babyshop.repository.UserRepository;
 
 @Service
@@ -14,16 +16,24 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartRepository cartRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    } // Dependency injection
+        this.cartRepository = cartRepository;
+    }
 
     public User registerUser(User newUser) {
+        // -- CREATE USER
         // 1. Find if they already exist
         // 2. If existing throw an error if not register the user, if not Step 3
-        // 3. Hash the password and then save
+        // 3. Hash the password and save User
+
+        // USER NEEDS A CART
+        // 4. Call dependency CartRepository and create new cart, attach to user.
+        // 5. Save Cart 
+
 
         // 1
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
@@ -35,9 +45,14 @@ public class UserService {
 
         // 3
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        User savedUser = userRepository.save(newUser);
 
-        userRepository.save(newUser);
-        return newUser;
+        // 4
+        Cart cart = new Cart();
+        cart.setUser(savedUser);
+        cartRepository.save(cart);
+
+        return savedUser;
     }
 
     public User loginUser(String email, String rawPassword) {
