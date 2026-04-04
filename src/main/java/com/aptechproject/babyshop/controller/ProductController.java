@@ -38,7 +38,7 @@ public class ProductController {
     // 4. Fully save
     // 5. Return a Created status containing the saved product
 
-    @PostMapping(value = AppConstants.API_ADD_PRODUCT, consumes = {"multipart/form-data"})
+    @PostMapping(value = AppConstants.API_SERVICE_ADD, consumes = {"multipart/form-data"})
     public ResponseEntity<?> addProduct(@Valid @RequestPart("product") Product inboundProduct,
         @RequestPart(value = "image", required = false) MultipartFile imageFile
     ) {
