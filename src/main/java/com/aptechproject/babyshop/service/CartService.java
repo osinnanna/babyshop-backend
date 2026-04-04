@@ -3,6 +3,7 @@ package com.aptechproject.babyshop.service;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,5 +120,12 @@ public class CartService {
         receipt.setTotalAmountPaid(totalAmount);
 
         return receipt;
+    }
+
+    @Transactional(readOnly = true)
+    public Cart getCart(String userEmail) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS));
+        return cartRepository.findByUser(user).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_CART_INVALID));
     }
 }

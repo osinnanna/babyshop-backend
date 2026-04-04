@@ -2,6 +2,7 @@ package com.aptechproject.babyshop.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,16 @@ public class CartController {
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             CheckoutReceipt receipt = cartService.checkoutCart(email);
             return ResponseEntity.ok(receipt);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getMyCart(String userEmail) {
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            return ResponseEntity.ok(cartService.getCart(email));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
