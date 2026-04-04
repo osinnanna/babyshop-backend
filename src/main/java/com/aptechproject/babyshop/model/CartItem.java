@@ -1,6 +1,7 @@
 package com.aptechproject.babyshop.model;
 
 import com.aptechproject.babyshop.constant.AppConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,8 @@ public class CartItem {
     @JoinColumn(name = "product_id", nullable = false) // Ensures every item is tied to a real product
     private Product product;
 
+    // (Jakson has to return the whole Js object when being returned in the contoller, so after entering the cart reading the fields in `Cart.java` depending on what the data is it sees the list heads inside the first CartItem, reads the above fields, id, quantity and product, gets to cart and the cycle starts again)
+    @JsonIgnore // Inf recursion
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false) // Ensures every item belongs to a real cart
     private Cart cart;
