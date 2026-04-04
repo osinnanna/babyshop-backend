@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.aptechproject.babyshop.model.User;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -35,5 +36,29 @@ public class JwtService {
 
     private Key key() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+
+    // --- Read and decrypt token ---
+    // 1. Decrypt token
+    // 2. Extract email
+    // 3. Extract role
+
+    // 1
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(key())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
+
+    // 2
+    public String extractEmail(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    // 3
+    public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
     }
 }
