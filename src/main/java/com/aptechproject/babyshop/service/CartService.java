@@ -65,6 +65,11 @@ public class CartService {
         // 3
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_PRODUCT_INVALID));
 
+        // Check if stock is enough for request (avoid negative stock)
+        if (quantity > product.getStockQuantity()) {
+            throw new RuntimeException(AppConstants.ERROR_STOCK_OVERDRAFT);
+        }
+
         // 4
         CartItem item = new CartItem();
         item.setQuantity(quantity);

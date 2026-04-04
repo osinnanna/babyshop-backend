@@ -11,6 +11,7 @@ public final class AppConstants {
     public static final String ERROR_PRODUCT_INVALID = "Product cannot be found";
     public static final String ERROR_CART_INVALID = "There was an error, your cart does not exists";
     public static final String ERROR_CART_EMPTY = "Cart is empty!";
+    public static final String ERROR_STOCK_OVERDRAFT = "Not enough stock available!";
     
 
     // --- VALIDATION MESSAGES ---
