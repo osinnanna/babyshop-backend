@@ -36,7 +36,7 @@ public class SecurityConfig {
 
                     // 2.
                     .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
-
+                    .requestMatchers("/error").permitAll() // <-- UNMASKS THE PHANTOM 403
                     .anyRequest().authenticated())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
