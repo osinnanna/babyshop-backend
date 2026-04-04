@@ -8,6 +8,8 @@ public final class AppConstants {
     public static final String ERROR_USER_ALREADY_EXISTS = "You are already registered";
     public static final String ERROR_INVALID_CREDENTIALS = "Invalid email or password";
     public static final String ERROR_IMAGE_UPLOAD = "Failed to upload image to Supabase";
+    public static final String ERROR_PRODUCT_INVALID = "Product cannot be found";
+    public static final String ERROR_CART_INVALID = "There was an error, your cart does not exists";
 
     // --- VALIDATION MESSAGES ---
     public static final String VALIDATION_NAME_EMPTY = "Name cannot be empty";
