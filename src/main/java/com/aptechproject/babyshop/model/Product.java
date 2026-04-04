@@ -27,7 +27,7 @@ public class Product {
     @NotNull(message = AppConstants.VALIDATION_PRICE_EMPTY)
     private BigDecimal price;
 
-    @NotNull(message = AppConstants.VALIDATION_STOCKQTY_EMPTY)
+    @NotNull(message = AppConstants.VALIDATION_QUANTITY_EMPTY)
     private Integer stockQuantity;
     
     private String imageUrl;
