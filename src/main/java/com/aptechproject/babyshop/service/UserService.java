@@ -1,7 +1,5 @@
 package com.aptechproject.babyshop.service;
 
-import java.util.Optional;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +33,9 @@ public class UserService {
         // 5. Save Cart 
 
 
-        // 1
-        Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
+        // 1 & 2
+        userRepository.findByEmail(newUser.getEmail()).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_USER_ALREADY_EXISTS));
         
-        // 2
-        if (existingUser.isPresent()) {
-            throw new RuntimeException(AppConstants.ERROR_USER_ALREADY_EXISTS);
-        }
-
         // 3
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         User savedUser = userRepository.save(newUser);

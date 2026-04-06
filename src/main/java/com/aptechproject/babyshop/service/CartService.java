@@ -53,14 +53,10 @@ public class CartService {
         // STEP 6: Return the Cart so the controller can send it back to the Flutter app!
 
         // 1
-        Optional<User> currentUser = userRepository.findByEmail(userEmail);
-        if (!currentUser.isPresent()) throw new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS);
-
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS));
+        
         // 2
-        var user = currentUser.get();
-        Optional<Cart> currentCart = cartRepository.findByUser(user);
-        if (!currentCart.isPresent()) throw new RuntimeException(AppConstants.ERROR_CART_INVALID);
-        Cart cart = currentCart.get();
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_CART_INVALID));
 
         // 3
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_PRODUCT_INVALID));
