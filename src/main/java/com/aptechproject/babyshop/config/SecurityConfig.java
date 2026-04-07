@@ -27,18 +27,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/users/**").permitAll()
+          .csrf(csrf -> csrf.disable())
+          // 1. Add this: Make the session stateless (vital for JWTs)
+          .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
+          // 2. Add these: Disable the default "human" login methods
+          .httpBasic(basic -> basic.disable())
+          .formLogin(form -> form.disable())
 
-                    // 1
-                    .requestMatchers(HttpMethod.POST, "/api/products/add").hasAuthority(Role.ROLE_ADMIN.name())
-
-                    // 2.
-                    .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
-                    .requestMatchers("/error").permitAll() // <-- UNMASKS THE PHANTOM 403
-                    .anyRequest().authenticated())
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+          .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/products/add").hasAuthority(Role.ROLE_ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
+                .requestMatchers("/error").permitAll()
+                .anyRequest().authenticated())
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

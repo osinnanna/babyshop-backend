@@ -1,7 +1,7 @@
 package com.aptechproject.babyshop.model;
 
 import com.aptechproject.babyshop.constant.AppConstants;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
