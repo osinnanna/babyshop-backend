@@ -12,6 +12,7 @@ public final class AppConstants {
     public static final String ERROR_CART_INVALID = "There was an error, your cart does not exists";
     public static final String ERROR_CART_EMPTY = "Cart is empty!";
     public static final String ERROR_STOCK_OVERDRAFT = "Not enough stock available!";
+    public static final String ERROR_INVALID_TOKEN = "Invalid / expired token!";
     
 
     // --- VALIDATION MESSAGES ---
