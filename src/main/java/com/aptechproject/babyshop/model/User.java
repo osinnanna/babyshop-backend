@@ -25,7 +25,7 @@ public class User {
     @Column(unique = true) 
     private String email;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = AppConstants.VALIDATION_PASSWORD_EMPTY)
     private String password;
 
