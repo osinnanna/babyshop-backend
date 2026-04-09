@@ -12,6 +12,7 @@ import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.dto.AddToCartRequest;
 import com.aptechproject.babyshop.dto.CheckoutReceipt;
 import com.aptechproject.babyshop.model.Cart;
+import com.aptechproject.babyshop.model.ErrorMessage;
 import com.aptechproject.babyshop.service.CartService;
 
 import jakarta.validation.Valid;
@@ -45,7 +46,7 @@ public class CartController {
             return ResponseEntity.ok(updatedCart);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         }
     }
 
@@ -56,7 +57,7 @@ public class CartController {
             CheckoutReceipt receipt = cartService.checkoutCart(email);
             return ResponseEntity.ok(receipt);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         }
     }
 
@@ -66,7 +67,7 @@ public class CartController {
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             return ResponseEntity.ok(cartService.getCart(email));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         }
     }
 }

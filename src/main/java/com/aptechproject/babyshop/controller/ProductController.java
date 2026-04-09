@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aptechproject.babyshop.constant.AppConstants;
+import com.aptechproject.babyshop.model.ErrorMessage;
 import com.aptechproject.babyshop.model.Product;
 import com.aptechproject.babyshop.service.ImageService;
 import com.aptechproject.babyshop.service.ProductService;
@@ -56,7 +57,7 @@ public class ProductController {
             productService.addProduct(inboundProduct);
             return ResponseEntity.status(HttpStatus.CREATED).body(inboundProduct);
         } catch (IOException | RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
         }
     }
 
@@ -69,7 +70,7 @@ public class ProductController {
             List<Product> allProducts = productService.getAllProducts();
             return ResponseEntity.ok(allProducts);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
         }
     }
 }

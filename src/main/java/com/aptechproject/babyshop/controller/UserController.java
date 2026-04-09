@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.dto.LoginRequest;
+import com.aptechproject.babyshop.model.ErrorMessage;
 import com.aptechproject.babyshop.model.User;
 import com.aptechproject.babyshop.service.JwtService;
 import com.aptechproject.babyshop.service.UserService;
@@ -38,9 +39,9 @@ public class UserController {
         try {
             userService.registerUser(newUser);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", newUser.getEmail()));
         } catch (RuntimeException e) { // The error that was thrown in UserService.registerUser()
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
         }
     }
 
@@ -60,7 +61,7 @@ public class UserController {
             String token = jwtService.generateToken(loginUser);
             return ResponseEntity.ok(Map.of("token", token));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(e.getMessage()));
         }
     }
     
@@ -70,7 +71,7 @@ public class UserController {
             String resetLink = userService.generatePasswordResetToken(request.get("email"));
             return ResponseEntity.ok(Map.of("message", "Check your email", "resetLink", resetLink));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         }
     }
 
@@ -80,7 +81,7 @@ public class UserController {
             userService.resetPassword(request.get("token"), request.get("newPassword"));
             return ResponseEntity.ok(Map.of("message", "Password successfully updated!"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         }
     }
 }
