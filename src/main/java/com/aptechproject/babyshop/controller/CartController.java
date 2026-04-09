@@ -61,7 +61,7 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getMyCart(String userEmail) {
+    public ResponseEntity<?> getMyCart() {
         try {
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             return ResponseEntity.ok(cartService.getCart(email));
