@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +62,17 @@ public class UserController {
             // 3
             String token = jwtService.generateToken(loginUser);
             return ResponseEntity.ok(Map.of("token", token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(e.getMessage()));
+        }
+    }
+
+    @GetMapping(AppConstants.API_ME)
+    public ResponseEntity<?> getCurrentUser() {
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.getCurrentUser(email);
+            return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(e.getMessage()));
         }

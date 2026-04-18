@@ -74,6 +74,10 @@ public class UserService {
         return user;
     }
 
+    public User getCurrentUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS));
+    }
+
     @Transactional
     public String generatePasswordResetToken(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstants.ERROR_INVALID_CREDENTIALS));
