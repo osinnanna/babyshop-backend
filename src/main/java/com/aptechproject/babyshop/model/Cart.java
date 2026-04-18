@@ -21,6 +21,7 @@ public class Cart {
 
     // mappedBy = "cart" means: "Look at the 'cart' field inside the CartItem class to find the database mapping"
     // cascade = CascadeType.ALL means: "If I delete this Cart, delete all the CartItems inside it automatically"
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    // fetch = FetchType.EAGER ensures CartItems are loaded immediately with the Cart
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<>();
 }
