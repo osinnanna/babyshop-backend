@@ -13,6 +13,8 @@ public final class AppConstants {
     public static final String ERROR_CART_EMPTY = "Cart is empty!";
     public static final String ERROR_STOCK_OVERDRAFT = "Not enough stock available!";
     public static final String ERROR_INVALID_TOKEN = "Invalid / expired token!";
+    public static final String ERROR_RATING_INVALID = "Rating must be between 1 and 5";
+    public static final String ERROR_REVIEW_TOO_LONG = "Review cannot exceed 500 characters";
     
 
     // --- VALIDATION MESSAGES ---
@@ -22,6 +24,8 @@ public final class AppConstants {
     public static final String VALIDATION_PASSWORD_EMPTY = "Password cannot be empty";
     public static final String VALIDATION_QUANTITY_EMPTY = "Quantity cannot be null";
     public static final String VALIDATION_PRICE_EMPTY = "Price cannot be null";
+    public static final String VALIDATION_CATEGORY_EMPTY = "Category cannot be empty";
+    public static final String VALIDATION_BRAND_EMPTY = "Brand cannot be empty";
 
     // --- API ENDPOINTS ---
     public static final String API_BASE = "/api";
@@ -31,6 +35,8 @@ public final class AppConstants {
     public static final String API_ME = "/me";
     public static final String API_PRODUCTS = API_BASE + "/products";
     public static final String API_SERVICE_ADD = "/add";
+    public static final String API_RATE = "/{productId}/rating";
+    public static final String API_RATINGS = "/{productId}/ratings";
     public static final String API_CART = API_BASE + "/cart";
     public static final String API_CHECKOUT = "/checkout";
     public static final String API_ORDERS = API_BASE + "/orders";

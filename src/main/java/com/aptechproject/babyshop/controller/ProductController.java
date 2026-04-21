@@ -5,14 +5,17 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aptechproject.babyshop.constant.AppConstants;
+import com.aptechproject.babyshop.dto.RateProductRequest;
 import com.aptechproject.babyshop.model.ErrorMessage;
 import com.aptechproject.babyshop.model.Product;
 import com.aptechproject.babyshop.service.ImageService;
 import com.aptechproject.babyshop.service.ProductService;
+import com.aptechproject.babyshop.service.RatingService;
 import com.aptechproject.babyshop.service.SupabaseStorageService;
 
 import jakarta.validation.Valid;
@@ -24,11 +27,13 @@ public class ProductController {
     private final ProductService productService;
     private final ImageService imageService;
     private final SupabaseStorageService supabaseStorageService;
+    private final RatingService ratingService;
 
-    public ProductController(ProductService productService, ImageService imageService, SupabaseStorageService supabaseStorageService) {
+    public ProductController(ProductService productService, ImageService imageService, SupabaseStorageService supabaseStorageService, RatingService ratingService) {
         this.productService = productService;
         this.imageService = imageService;
         this.supabaseStorageService = supabaseStorageService;
+        this.ratingService = ratingService;
     }
 
     // --- I: Add Product ---
@@ -69,6 +74,25 @@ public class ProductController {
         try {
             List<Product> allProducts = productService.getAllProducts();
             return ResponseEntity.ok(allProducts);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
+        }
+    }
+
+    @PostMapping(AppConstants.API_RATE)
+    public ResponseEntity<?> rateProduct(@PathVariable Long productId, @Valid @RequestBody RateProductRequest request) {
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            return ResponseEntity.ok(ratingService.rateProduct(email, productId, request));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
+        }
+    }
+
+    @GetMapping(AppConstants.API_RATINGS)
+    public ResponseEntity<?> getProductRatings(@PathVariable Long productId) {
+        try {
+            return ResponseEntity.ok(ratingService.getProductRatings(productId));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
         }

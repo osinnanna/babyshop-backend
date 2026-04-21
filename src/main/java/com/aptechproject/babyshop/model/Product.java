@@ -21,6 +21,12 @@ public class Product {
     @NotBlank(message = AppConstants.VALIDATION_NAME_EMPTY)
     private String name;
 
+    @NotBlank(message = AppConstants.VALIDATION_CATEGORY_EMPTY)
+    private String category;
+
+    @NotBlank(message = AppConstants.VALIDATION_BRAND_EMPTY)
+    private String brand;
+
     @Column(length = 1000)
     private String description;
 
@@ -29,6 +35,10 @@ public class Product {
 
     @NotNull(message = AppConstants.VALIDATION_QUANTITY_EMPTY)
     private Integer stockQuantity;
+
+    private Double averageRating = 0.0;
+
+    private Integer ratingCount = 0;
     
     private String imageUrl;
 }
