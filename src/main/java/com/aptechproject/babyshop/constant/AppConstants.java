@@ -33,6 +33,8 @@ public final class AppConstants {
     public static final String API_SERVICE_ADD = "/add";
     public static final String API_CART = API_BASE + "/cart";
     public static final String API_CHECKOUT = "/checkout";
+    public static final String API_ORDERS = API_BASE + "/orders";
+    public static final String API_HISTORY = "/history";
 
     // --- SUCCESS MESSAGES ---
     public static final String VALIDATION_CHECKOUT_SUCCESSFUL= "Checkout successful! Thank you for shopping.";

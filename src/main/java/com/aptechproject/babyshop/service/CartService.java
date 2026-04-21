@@ -10,10 +10,13 @@ import com.aptechproject.babyshop.constant.AppConstants;
 import com.aptechproject.babyshop.dto.CheckoutReceipt;
 import com.aptechproject.babyshop.model.Cart;
 import com.aptechproject.babyshop.model.CartItem;
+import com.aptechproject.babyshop.model.Order;
+import com.aptechproject.babyshop.model.OrderItem;
 import com.aptechproject.babyshop.model.Product;
 import com.aptechproject.babyshop.model.User;
 import com.aptechproject.babyshop.repository.CartItemRepository;
 import com.aptechproject.babyshop.repository.CartRepository;
+import com.aptechproject.babyshop.repository.OrderRepository;
 import com.aptechproject.babyshop.repository.ProductRepository;
 import com.aptechproject.babyshop.repository.UserRepository;
 
@@ -24,12 +27,14 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
-    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository userRepository, ProductRepository productRepository) {
+    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.userRepository = userRepository;
-        this.productRepository = productRepository; 
+        this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
     }
 
     public Cart addItemToCart(String userEmail, Long productId, Integer quantity) {
@@ -92,20 +97,37 @@ public class CartService {
 
         if (cart.getItems().isEmpty()) throw new RuntimeException(AppConstants.ERROR_CART_EMPTY);
 
-        double totalAmount = 0.0;
+        BigDecimal totalAmount = BigDecimal.ZERO;
         int totalItems = 0;
+
+        Order order = new Order();
+        order.setUser(user);
 
         // 3
         for (CartItem item : cart.getItems()) {
             Product productAttachedToItem = item.getProduct();
 
-            BigDecimal bgDecItemTotal = productAttachedToItem.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-            totalAmount += bgDecItemTotal.doubleValue();
+            BigDecimal itemTotal = productAttachedToItem.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            totalAmount = totalAmount.add(itemTotal);
             totalItems += item.getQuantity();
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setProductId(productAttachedToItem.getId());
+            orderItem.setProductName(productAttachedToItem.getName());
+            orderItem.setProductImageUrl(productAttachedToItem.getImageUrl());
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setUnitPrice(productAttachedToItem.getPrice());
+            orderItem.setLineTotal(itemTotal);
+            order.getItems().add(orderItem);
 
             productAttachedToItem.setStockQuantity(productAttachedToItem.getStockQuantity() - item.getQuantity());
             productRepository.save(productAttachedToItem);
         }
+
+        order.setTotalAmount(totalAmount);
+        order.setTotalItems(totalItems);
+        orderRepository.save(order);
 
         // 4. Empty the cart in the database!
         cartItemRepository.deleteAll(cart.getItems());
@@ -117,7 +139,7 @@ public class CartService {
         CheckoutReceipt receipt = new CheckoutReceipt();
         receipt.setMessage(AppConstants.VALIDATION_CHECKOUT_SUCCESSFUL);
         receipt.setTotalItemsBought(totalItems);
-        receipt.setTotalAmountPaid(totalAmount);
+        receipt.setTotalAmountPaid(totalAmount.doubleValue());
 
         return receipt;
     }
