@@ -36,7 +36,11 @@ public class SecurityConfig {
 
           .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/users/**").permitAll()
+                // Admin Only: Create, Update, Delete
                 .requestMatchers(HttpMethod.POST, "/api/products/add").hasAuthority(Role.ROLE_ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, "/api/products/*").hasAuthority(Role.ROLE_ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, "/api/products/*").hasAuthority(Role.ROLE_ADMIN.name())
+                // Public: Read inventory and ratings
                 .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/*/ratings").permitAll()
                 .requestMatchers("/error").permitAll()

@@ -97,4 +97,32 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
         }
     }
+
+    // --- III: Update Product ---
+    // 1. Receive the ID from the URL path
+    // 2. Receive the updated JSON payload
+    // 3. Update in database via service
+    @PutMapping("/{id}") 
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @Valid @RequestBody Product updatedProduct) {
+        try {
+            // Pass to service layer to handle finding the existing product and saving the new data
+            Product savedProduct = productService.updateProduct(id, updatedProduct);
+            return ResponseEntity.ok(savedProduct);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
+        }
+    }
+
+    // --- IV: Delete Product ---
+    // 1. Receive the ID from the URL path
+    // 2. Delete from database via service
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        try {
+            productService.deleteProduct(id);
+            return ResponseEntity.ok().build(); // Returns a 200 OK with no body
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(e.getMessage()));
+        }
+    }
 }
